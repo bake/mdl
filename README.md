@@ -16,7 +16,7 @@ supported sites. An alternative with more features is
 
 ```bash
 $ mdl -help
-Usage: ./mdl [-out=.] [-worker=4] url
+Usage: mdl [-out=.] [-worker=4] url
 Flags:
   -out string
         Download directory (default ".")

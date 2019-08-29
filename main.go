@@ -60,7 +60,7 @@ func main() {
 
 	url, err := url.Parse(flag.Arg(0))
 	if err != nil {
-		fmt.Printf("could not parse URL: %v\n", err)
+		fmt.Fprintf(os.Stderr, "could not parse URL: %v\n", err)
 		os.Exit(1)
 	}
 	cs := clients{
@@ -70,12 +70,12 @@ func main() {
 	}
 	c := cs.filter(url)
 	if c == nil {
-		fmt.Printf("the URL is not supported\n")
+		fmt.Fprintf(os.Stderr, "the URL is not supported\n")
 		os.Exit(1)
 	}
 	files, err := c.Files(url)
 	if err != nil {
-		fmt.Printf("could not get files: %v\n", err)
+		fmt.Fprintf(os.Stderr, "could not get files: %v\n", err)
 		os.Exit(1)
 	}
 
@@ -92,7 +92,7 @@ func main() {
 			defer bar.Increment()
 			err := download(c, path.Join(*out, fmt.Sprintf("%04d.png", i)), file)
 			if err != nil {
-				fmt.Printf("%v\n", err)
+				fmt.Fprintln(os.Stderr, err)
 				os.Exit(1)
 			}
 		}()

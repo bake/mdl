@@ -6,11 +6,18 @@ Think of youtube-dl but for mangas. And with a very, very small number of
 supported sites. An alternative with more features is
 [comics-downloader](https://github.com/Girbons/comics-downloader).
 
-## Supported Sites
+## Supported sites
 
 - Dongmanhua (Chinese)
-- MangaDex (English)
-- MangaRock (English)
+- MangaDex (English, [library](https://github.com/bake/mangadex))
+- MangaRock (English, [library](https://github.com/bake/mangarock))
+
+## Install
+
+```bash
+$ go get github.com/bake/mdl
+$
+```
 
 ## Usage
 

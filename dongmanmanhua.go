@@ -1,7 +1,6 @@
 package main
 
 import (
-	"io"
 	"net/http"
 	"net/url"
 	"strings"
@@ -10,10 +9,12 @@ import (
 	"github.com/pkg/errors"
 )
 
-type dongmanmanhua struct{}
+type dongmanmanhua struct {
+	domain string
+}
 
 func newDongmanmanhua() *dongmanmanhua {
-	return &dongmanmanhua{}
+	return &dongmanmanhua{"https://www.dongmanmanhua.cn/"}
 }
 
 func (dongmanmanhua) Match(url *url.URL) bool {
@@ -25,7 +26,12 @@ func (dongmanmanhua) Match(url *url.URL) bool {
 }
 
 func (d *dongmanmanhua) Files(url *url.URL) (urls []string, err error) {
-	res, err := d.get(url.String())
+	req, err := http.NewRequest(http.MethodGet, url.String(), nil)
+	if err != nil {
+		return nil, errors.Wrap(err, "could not generate new request")
+	}
+	d.Authenticate(req)
+	res, err := http.DefaultClient.Do(req)
 	if err != nil {
 		return nil, errors.Wrap(err, "could not get chapter")
 	}
@@ -41,18 +47,6 @@ func (d *dongmanmanhua) Files(url *url.URL) (urls []string, err error) {
 	return urls, nil
 }
 
-func (d *dongmanmanhua) Download(url string) (io.ReadCloser, error) {
-	res, err := d.get(url)
-	return res.Body, err
-}
-
-// get sends a GET request and sets its referer to the requested URL.
-// Dongmanmanhua does not accept requests without a referer from their own site.
-func (dongmanmanhua) get(url string) (*http.Response, error) {
-	req, err := http.NewRequest(http.MethodGet, url, nil)
-	if err != nil {
-		return nil, errors.Wrapf(err, "could not create request")
-	}
-	req.Header.Add("Referer", url)
-	return http.DefaultClient.Do(req)
+func (d *dongmanmanhua) Authenticate(req *http.Request) {
+	req.Header.Add("Referer", d.domain)
 }

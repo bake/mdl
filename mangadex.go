@@ -1,7 +1,6 @@
 package main
 
 import (
-	"io"
 	"net/http"
 	"net/url"
 	"strings"
@@ -30,7 +29,4 @@ func (md *mangaDex) Files(url *url.URL) ([]string, error) {
 	return chapter.Images(), nil
 }
 
-func (mangaDex) Download(url string) (io.ReadCloser, error) {
-	res, err := http.Get(url)
-	return res.Body, err
-}
+func (mangaDex) Authenticate(req *http.Request) {}

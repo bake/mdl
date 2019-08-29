@@ -8,7 +8,7 @@ import (
 	_ "image/gif"
 	_ "image/jpeg"
 	"image/png"
-	"io"
+	"net/http"
 	"net/url"
 	"os"
 	"path"
@@ -26,9 +26,8 @@ type client interface {
 	Match(url *url.URL) bool
 	// Files return a slice of URLs of images.
 	Files(url *url.URL) ([]string, error)
-	// Download downloads an image and returns its read closer. This is usually
-	// the body of a HTTP response. Useful if a site needs to set special headers.
-	Download(url string) (io.ReadCloser, error)
+	// Authenticate can optionally modify a request and add necessary headers.
+	Authenticate(req *http.Request)
 }
 
 type clients []client
@@ -100,12 +99,17 @@ func main() {
 }
 
 func download(c client, dst, src string) error {
-	r, err := c.Download(src)
+	req, err := http.NewRequest(http.MethodGet, src, nil)
+	if err != nil {
+		return errors.Wrap(err, "could not generate new request")
+	}
+	c.Authenticate(req)
+	res, err := http.DefaultClient.Do(req)
 	if err != nil {
 		return errors.Wrap(err, "cound not download image")
 	}
-	defer r.Close()
-	img, _, err := image.Decode(r)
+	defer res.Body.Close()
+	img, _, err := image.Decode(res.Body)
 	if err != nil {
 		return errors.Wrap(err, "could not decode image")
 	}

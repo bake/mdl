@@ -1,7 +1,6 @@
 package main
 
 import (
-	"io"
 	"net/http"
 	"net/url"
 	"regexp"
@@ -37,7 +36,4 @@ func (mr *mangaRock) Files(url *url.URL) ([]string, error) {
 	return chapter.Pages, nil
 }
 
-func (mangaRock) Download(url string) (io.ReadCloser, error) {
-	res, err := http.Get(url)
-	return res.Body, err
-}
+func (mangaRock) Authenticate(req *http.Request) {}

@@ -8,7 +8,7 @@ supported sites. An alternative with more features is
 
 ## Supported sites
 
-- Dongmanhua (Chinese)
+- Dongmanmanhua (Chinese)
 - MangaDex (English, [library](https://github.com/bake/mangadex))
 - MangaRock (English, [library](https://github.com/bake/mangarock))
 

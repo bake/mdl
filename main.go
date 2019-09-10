@@ -5,14 +5,16 @@ import (
 	"flag"
 	"fmt"
 	"image"
-	_ "image/gif"
-	_ "image/jpeg"
+	"image/gif"
+	"image/jpeg"
 	"image/png"
+	"io"
 	"net/http"
 	"net/url"
 	"os"
 	"path"
 	"runtime"
+	"strings"
 
 	_ "github.com/bake/mri"
 	"github.com/cheggaaa/pb/v3"
@@ -44,10 +46,11 @@ func (cs clients) filter(url *url.URL) client {
 
 func main() {
 	out := flag.String("out", ".", "Download directory")
+	format := flag.String("format", "jpeg", "Encode images as GIF, JPEG or PNG")
 	worker := flag.Int("worker", runtime.NumCPU(), "Concurrent downloads")
 	flag.Usage = func() {
 		fmt.Fprintf(os.Stderr, "Usage: %s ", os.Args[0])
-		fmt.Fprintf(os.Stderr, "[-out=%s] [-worker=%d] url\n", *out, *worker)
+		fmt.Fprintf(os.Stderr, "[-format=%s] [-out=%s] [-worker=%d] url\n", *format, *out, *worker)
 		fmt.Fprintf(os.Stderr, "Flags:\n")
 		flag.PrintDefaults()
 	}
@@ -89,7 +92,8 @@ func main() {
 		go func() {
 			defer sem.Release(1)
 			defer bar.Increment()
-			err := download(c, path.Join(*out, fmt.Sprintf("%04d.png", i)), file)
+			dst := path.Join(*out, fmt.Sprintf("%04d.%s", i, *format))
+			err := download(c, dst, file, *format)
 			if err != nil {
 				fmt.Fprintln(os.Stderr, err)
 				os.Exit(1)
@@ -98,7 +102,7 @@ func main() {
 	}
 }
 
-func download(c client, dst, src string) error {
+func download(c client, dst, src, format string) error {
 	req, err := http.NewRequest(http.MethodGet, src, nil)
 	if err != nil {
 		return errors.Wrap(err, "could not generate new request")
@@ -118,8 +122,18 @@ func download(c client, dst, src string) error {
 		return errors.Wrap(err, "could not create file")
 	}
 	defer w.Close()
-	if err := png.Encode(w, img); err != nil {
-		return errors.Wrap(err, "could not encode image")
+	return encode(w, img, format)
+}
+
+func encode(w io.Writer, img image.Image, format string) error {
+	switch strings.ToLower(format) {
+	case "gif":
+		return gif.Encode(w, img, nil)
+	case "jpeg":
+		return jpeg.Encode(w, img, nil)
+	case "png":
+		return png.Encode(w, img)
+	default:
+		return errors.Errorf("unexpected format %q", format)
 	}
-	return nil
 }

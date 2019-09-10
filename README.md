@@ -23,8 +23,10 @@ $
 
 ```bash
 $ mdl -help
-Usage: mdl [-out=.] [-worker=4] url
+Usage: mdl [-format=jpeg] [-out=.] [-worker=4] url
 Flags:
+  -format string
+        Encode images as GIF, JPEG or PNG (default "jpeg")
   -out string
         Download directory (default ".")
   -worker int

@@ -44,6 +44,8 @@ func (cs clients) filter(url *url.URL) client {
 	return nil
 }
 
+var version = "development"
+
 func main() {
 	out := flag.String("out", ".", "Download directory")
 	format := flag.String("format", "jpeg", "Encode images as GIF, JPEG or PNG")
@@ -53,6 +55,7 @@ func main() {
 		fmt.Fprintf(os.Stderr, "[-format=%s] [-out=%s] [-worker=%d] url\n", *format, *out, *worker)
 		fmt.Fprintf(os.Stderr, "Flags:\n")
 		flag.PrintDefaults()
+		fmt.Fprintf(os.Stderr, "Version: %s\n", version)
 	}
 	flag.Parse()
 	if flag.NArg() < 1 {

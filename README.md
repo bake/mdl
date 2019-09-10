@@ -31,4 +31,5 @@ Flags:
         Download directory (default ".")
   -worker int
         Concurrent downloads (default 4)
+Version: 6fb120dc49873e54581e756fffdeeb2592980ea2
 ```

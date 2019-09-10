@@ -1,4 +1,4 @@
-LDFLAGS=-ldflags "-X main.version=`git rev-parse HEAD`"
+LDFLAGS=-ldflags "-X main.version=`git describe`"
 
 default:
 	GOOS=darwin GOARCH=amd64 go build -o mdl-darwin-amd64 ${LDFLAGS}

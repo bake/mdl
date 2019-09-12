@@ -30,10 +30,7 @@ func (mr *mangaRock) Match(url *url.URL) bool {
 func (mr *mangaRock) Files(url *url.URL) ([]string, error) {
 	ids := mr.reg.FindStringSubmatch(url.Path)
 	chapter, err := mr.Chapter(ids[1], ids[2])
-	if err != nil {
-		return nil, errors.Wrapf(err, "could not get chapter %s of %s", ids[2], ids[1])
-	}
-	return chapter.Pages, nil
+	return chapter.Pages, errors.Wrapf(err, "could not get chapter %s of %s", ids[2], ids[1])
 }
 
 func (mangaRock) Authenticate(req *http.Request) {}

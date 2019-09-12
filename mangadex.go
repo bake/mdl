@@ -22,6 +22,7 @@ func (mangaDex) Match(url *url.URL) bool {
 
 func (md *mangaDex) Files(url *url.URL) ([]string, error) {
 	id := strings.TrimPrefix(url.Path, "/chapter/")
+	id = id[:strings.Index(id, "/")]
 	chapter, err := md.Chapter(id)
 	return chapter.Images(), errors.Wrapf(err, "could not get chapter %s", id)
 }

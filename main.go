@@ -48,7 +48,7 @@ var version = "development"
 
 func main() {
 	out := flag.String("out", ".", "Download directory")
-	format := flag.String("format", "jpeg", "Encode images as GIF, JPEG or PNG")
+	format := flag.String("format", "jpg", "Encode images as GIF, JPG or PNG")
 	worker := flag.Int("worker", runtime.NumCPU(), "Concurrent downloads")
 	flag.Usage = func() {
 		fmt.Fprintf(os.Stderr, "Usage: %s ", os.Args[0])
@@ -132,7 +132,7 @@ func encode(w io.Writer, img image.Image, format string) error {
 	switch strings.ToLower(format) {
 	case "gif":
 		return gif.Encode(w, img, nil)
-	case "jpeg":
+	case "jpg", "jpeg":
 		return jpeg.Encode(w, img, nil)
 	case "png":
 		return png.Encode(w, img)

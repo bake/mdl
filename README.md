@@ -23,13 +23,13 @@ $
 
 ```bash
 $ mdl -help
-Usage: mdl [-format=jpeg] [-out=.] [-worker=4] url
+Usage: mdl [-format=jpg] [-out=.] [-worker=4] url
 Flags:
   -format string
-        Encode images as GIF, JPEG or PNG (default "jpeg")
+        Encode images as GIF, JPG or PNG (default "jpg")
   -out string
         Download directory (default ".")
   -worker int
         Concurrent downloads (default 4)
-Version: v1.0.0
+Version: 1.0.1
 ```

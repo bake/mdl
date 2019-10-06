@@ -14,6 +14,9 @@ supported sites. An alternative with more features is
 
 ## Install
 
+Download [the current release](https://github.com/bake/mdl/releases) or use
+`go get`.
+
 ```bash
 $ go get github.com/bake/mdl
 $

@@ -10,7 +10,6 @@ supported sites. An alternative with more features is
 
 - Dongmanmanhua (Chinese)
 - MangaDex (English, [library](https://github.com/bake/mangadex))
-- MangaRock (English, [library](https://github.com/bake/mangarock))
 
 ## Install
 

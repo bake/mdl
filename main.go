@@ -71,7 +71,6 @@ func main() {
 	cs := clients{
 		newDongmanmanhua(),
 		newMangaDex(),
-		newMangaRock(),
 	}
 	c := cs.filter(url)
 	if c == nil {

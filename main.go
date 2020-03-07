@@ -69,8 +69,8 @@ func main() {
 		os.Exit(1)
 	}
 	cs := clients{
-		newDongmanmanhua(),
-		newMangaDex(),
+		newDongmanClient(),
+		newMangaDexClient(),
 	}
 	c := cs.filter(url)
 	if c == nil {

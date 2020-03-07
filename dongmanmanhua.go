@@ -9,15 +9,15 @@ import (
 	"github.com/pkg/errors"
 )
 
-type dongmanmanhua struct {
+type dongmanClient struct {
 	domain string
 }
 
-func newDongmanmanhua() *dongmanmanhua {
-	return &dongmanmanhua{"https://www.dongmanmanhua.cn/"}
+func newDongmanClient() *dongmanClient {
+	return &dongmanClient{"https://www.dongmanmanhua.cn/"}
 }
 
-func (dongmanmanhua) Match(url *url.URL) bool {
+func (dongmanClient) Match(url *url.URL) bool {
 	if !strings.HasSuffix(url.Hostname(), "dongmanmanhua.cn") {
 		return false
 	}
@@ -25,7 +25,7 @@ func (dongmanmanhua) Match(url *url.URL) bool {
 	return vals.Get("title_no") != "" && vals.Get("episode_no") != ""
 }
 
-func (d *dongmanmanhua) Files(url *url.URL) (urls []string, err error) {
+func (d *dongmanClient) Files(url *url.URL) (urls []string, err error) {
 	req, err := http.NewRequest(http.MethodGet, url.String(), nil)
 	if err != nil {
 		return nil, errors.Wrap(err, "could not generate new request")
@@ -47,6 +47,6 @@ func (d *dongmanmanhua) Files(url *url.URL) (urls []string, err error) {
 	return urls, nil
 }
 
-func (d *dongmanmanhua) Authenticate(req *http.Request) {
+func (d *dongmanClient) Authenticate(req *http.Request) {
 	req.Header.Add("Referer", d.domain)
 }

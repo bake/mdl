@@ -9,6 +9,7 @@ supported sites. An alternative with more features is
 ## Supported sites
 
 - Dongmanmanhua (Chinese)
+- Kuaikanmanhua (Chinese)
 - MangaDex (English, [library](https://github.com/bake/mangadex))
 
 ## Install

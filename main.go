@@ -70,6 +70,7 @@ func main() {
 	}
 	cs := clients{
 		newDongmanClient(),
+		newKuaikanClient(),
 		newMangaDexClient(),
 	}
 	c := cs.filter(url)

@@ -11,6 +11,7 @@ supported sites. An alternative with more features is
 - Dongmanmanhua (Chinese)
 - Kuaikanmanhua (Chinese)
 - MangaDex (English, [library](https://github.com/bake/mangadex))
+- Tapas (English, [library](https://github.com/bake/tapas))
 
 ## Install
 

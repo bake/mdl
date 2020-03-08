@@ -72,6 +72,7 @@ func main() {
 		newDongmanClient(),
 		newKuaikanClient(),
 		newMangaDexClient(),
+		newTapasClient(),
 	}
 	c := cs.filter(url)
 	if c == nil {

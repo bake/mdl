@@ -50,12 +50,14 @@ func main() {
 	out := flag.String("out", ".", "Download directory")
 	format := flag.String("format", "jpg", "Encode images as GIF, JPG or PNG")
 	worker := flag.Int("worker", runtime.NumCPU(), "Concurrent downloads")
+	progress := flag.Bool("progress", false, "Show a progressbar")
 	flag.Usage = func() {
-		fmt.Fprintf(os.Stderr, "Usage: %s ", os.Args[0])
-		fmt.Fprintf(os.Stderr, "[-format=%s] [-out=%s] [-worker=%d] url\n", *format, *out, *worker)
-		fmt.Fprintf(os.Stderr, "Flags:\n")
+		flag.CommandLine.SetOutput(os.Stderr)
+		fmt.Fprintf(flag.CommandLine.Output(), "Usage: %s ", os.Args[0])
+		fmt.Fprintf(flag.CommandLine.Output(), "[-format=%s] [-out=%s] [-worker=%d] [-progress] url\n", *format, *out, *worker)
+		fmt.Fprintf(flag.CommandLine.Output(), "Flags:\n")
 		flag.PrintDefaults()
-		fmt.Fprintf(os.Stderr, "Version: %s\n", version)
+		fmt.Fprintf(flag.CommandLine.Output(), "Version: %s\n", version)
 	}
 	flag.Parse()
 	if flag.NArg() < 1 {
@@ -87,15 +89,20 @@ func main() {
 
 	sem := semaphore.NewWeighted(int64(*worker))
 	ctx := context.Background()
-	bar := pb.StartNew(len(files))
-	defer bar.Finish()
+	var bar *pb.ProgressBar
+	if *progress {
+		bar = pb.StartNew(len(files))
+		defer bar.Finish()
+	}
 	defer sem.Acquire(ctx, int64(*worker))
 	for i, file := range files {
 		i, file := i, file
 		sem.Acquire(ctx, 1)
 		go func() {
 			defer sem.Release(1)
-			defer bar.Increment()
+			if bar != nil {
+				defer bar.Increment()
+			}
 			dst := path.Join(*out, fmt.Sprintf("%04d.%s", i, *format))
 			err := download(c, dst, file, *format)
 			if err != nil {

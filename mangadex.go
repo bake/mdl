@@ -1,11 +1,13 @@
 package main
 
 import (
+	"context"
 	"net/http"
 	"net/url"
+	"strconv"
 	"strings"
 
-	"github.com/bake/mangadex"
+	"github.com/bake/mangadex/v2"
 	"github.com/pkg/errors"
 )
 
@@ -21,8 +23,15 @@ func (mangaDexClient) Match(url *url.URL) bool {
 }
 
 func (md *mangaDexClient) Files(url *url.URL) ([]string, error) {
-	id := strings.Split(url.Path, "/")
-	chapter, err := md.Chapter(id[2])
+	parts := strings.Split(url.Path, "/")
+	if len(parts) < 2 {
+		return nil, errors.Errorf("chapter ID missing in URL")
+	}
+	id, err := strconv.Atoi(parts[2])
+	if err != nil {
+		return nil, errors.Wrap(err, "could not parse chapter ID")
+	}
+	chapter, err := md.Chapter(context.Background(), id, nil)
 	return chapter.Images(), errors.Wrapf(err, "could not get chapter %s", id)
 }
 

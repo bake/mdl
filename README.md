@@ -27,13 +27,15 @@ $
 
 ```bash
 $ mdl -help
-Usage: mdl [-format=jpg] [-out=.] [-worker=4] url
+Usage: mdl [-format=jpg] [-out=.] [-worker=4] [-progress] url
 Flags:
   -format string
         Encode images as GIF, JPG or PNG (default "jpg")
   -out string
         Download directory (default ".")
+  -progress
+        Show a progressbar
   -worker int
         Concurrent downloads (default 4)
-Version: 1.0.1
+Version: 1.1.1
 ```
